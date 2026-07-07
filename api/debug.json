@@ -1,0 +1,17 @@
+{
+    "table_id": 1,
+    "customer_name": "Guest",
+    "payment_method": "qris",
+    "total": 35000,
+    "items": [
+        {
+            "id": "item-10",
+            "menu_id": "10",
+            "name": "Indomie Ayam Bawang",
+            "desc": "Indomie kuah ayam bawang",
+            "price": 15000,
+            "image": "assets\/images\/indomie-ayambawang.jpg",
+            "qty": 2
+        }
+    ]
+}

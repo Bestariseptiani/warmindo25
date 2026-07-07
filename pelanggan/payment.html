@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Warmindo - Complete Your Payment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .noodle-glow {
+            box-shadow: 0 10px 40px -10px rgba(142, 78, 20, 0.15);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #8e4e14 0%, #a33d23 100%);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #a33d23 0%, #8e4e14 100%);
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 2s linear infinite;
+        }
+        .method-card input:checked + div {
+            border-color: #a33d23;
+            background-color: #ffdad2;
+        }
+        .method-card input:checked + div .check-icon {
+            display: flex;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.35s ease-out forwards;
+        }
+        .qr-pattern {
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
+                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #1a1a1a 75%),
+                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+            background-size: 14px 14px;
+            background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+        }
+        .qr-corner {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 6px solid #1a1a1a;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(163, 61, 35, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(163, 61, 35, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(163, 61, 35, 0); }
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s infinite;
+        }
+</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-background": "#001f29",
+                        "surface-variant": "#c6e8f8",
+                        "tertiary": "#006a60",
+                        "on-primary-fixed-variant": "#6f3800",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#bedfef",
+                        "on-secondary-fixed-variant": "#83260e",
+                        "surface-container-high": "#ccedfe",
+                        "primary": "#8e4e14",
+                        "surface-container": "#d8f2ff",
+                        "tertiary-container": "#5cc6b7",
+                        "surface-container-low": "#e6f6ff",
+                        "inverse-surface": "#123441",
+                        "on-tertiary-container": "#005048",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "secondary": "#a33d23",
+                        "outline-variant": "#d8c2b5",
+                        "inverse-primary": "#ffb780",
+                        "on-surface-variant": "#534439",
+                        "on-error-container": "#93000a",
+                        "surface": "#f3faff",
+                        "outline": "#867468",
+                        "primary-fixed-dim": "#ffb780",
+                        "surface-tint": "#8e4e14",
+                        "tertiary-fixed": "#8cf5e4",
+                        "background": "#f3faff",
+                        "surface-container-highest": "#c6e8f8",
+                        "inverse-on-surface": "#dff4ff",
+                        "on-primary-container": "#6f3800",
+                        "primary-container": "#f4a261",
+                        "on-secondary-container": "#731a04",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#2f1400",
+                        "secondary-fixed": "#ffdad2",
+                        "secondary-container": "#ff8162",
+                        "on-surface": "#001f29",
+                        "primary-fixed": "#ffdcc4",
+                        "surface-bright": "#f3faff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#3c0700",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#6fd8c8",
+                        "secondary-fixed-dim": "#ffb4a2",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#00201c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "lg": "48px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "xl": "80px",
+                        "xs": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "title-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/20 shadow-md shadow-primary/10">
+<div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto h-16">
+<a href="../index.html" class="font-display-lg text-display-lg font-black text-secondary transition-transform active:scale-95">Warmindo</a>
+<nav class="hidden md:flex gap-md items-center">
+<a class="text-on-surface-variant font-body-md font-semibold hover:text-primary transition-colors" href="../index.html">Menu</a>
+<a class="text-on-surface-variant font-body-md font-semibold hover:text-primary transition-colors" href="shoppingcart.html">Cart</a>
+<a class="text-secondary font-bold border-b-2 border-secondary pb-1" href="#">Payment</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-primary hover:text-secondary transition-colors">table_restaurant</button>
+<a href="shoppingcart.html" class="relative">
+<button class="material-symbols-outlined text-primary hover:text-secondary transition-colors">shopping_cart</button>
+<span class="absolute -top-2 -right-2 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full" id="cart-badge">0</span>
+</a>
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjkxSzU6l6G27JbS14QRE6ajeTF4v4eLpLk9el7maTg2OaNd0SFIIbMpfrtI3SRtnmNtMAPjQfbyjUT3Os4dJfvNemZ2neHu5mpzCk0EFpzms0MfHjzY8ZITfumg-98sajKoCho-JrK4P-GoXczLIW0EMM2D9jI5W0t7kX5H5HqKIWbeTSSwUooZtLTWsAHyR8c2UQlh_eaxisBV_muyaGId8Qoy2zD4TI-VUPRtVqTGb_U42DRL_gVnOcm0gBYI-ovnfQQ2DBcqU" alt="Profile">
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow pt-24 pb-12 px-md max-w-4xl mx-auto w-full relative">
+<div class="mb-lg">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Almost there!</h1>
+<p class="text-on-surface-variant font-body-lg">Choose your preferred payment method to enjoy your delicious meal.</p>
+</div>
+<div id="empty-cart" class="hidden glass-card p-xl rounded-xl text-center noodle-glow">
+<span class="material-symbols-outlined text-[64px] text-outline/40 mb-md">shopping_cart</span>
+<h3 class="font-title-md text-on-surface mb-xs">No items to pay for</h3>
+<p class="text-on-surface-variant mb-md">Your cart is empty. Add some items first!</p>
+<a href="../index.html" class="inline-flex items-center gap-xs btn-gradient text-white px-md py-sm rounded-xl font-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">restaurant_menu</span>
+Browse Menu
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg" id="payment-content">
+<aside class="md:col-span-1 md:order-last">
+<div class="glass-card p-md rounded-xl noodle-glow sticky top-24">
+<h2 class="font-title-md text-title-md text-on-surface mb-md">Order Summary</h2>
+<ul class="space-y-sm mb-md" id="order-items"></ul>
+<div class="border-t border-outline-variant/30 pt-sm mt-sm">
+<div class="flex justify-between mb-xs">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="text-on-surface" id="subtotal">Rp 0</span>
+</div>
+<div class="flex justify-between mb-xs">
+<span class="text-on-surface-variant">Tax (10%)</span>
+<span class="text-on-surface" id="tax">Rp 0</span>
+</div>
+<div class="flex justify-between mb-md">
+<span class="text-on-surface-variant">Service Fee</span>
+<span class="text-on-surface" id="service">Rp 2.000</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-bold text-on-surface">Total</span>
+<span class="font-display-lg text-[24px] leading-none text-secondary" id="total">Rp 0</span>
+</div>
+</div>
+</div>
+</aside>
+<div class="md:col-span-2 space-y-lg">
+<section>
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Select Payment Method</h3>
+<div class="grid grid-cols-1 gap-sm">
+<label class="method-card cursor-pointer block group">
+<input checked class="hidden" name="payment_method" type="radio" value="qris">
+<div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
+<span class="material-symbols-outlined text-secondary text-3xl">qr_code</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">QRIS / E-Wallet</p>
+<p class="text-label-sm text-on-surface-variant uppercase">Gopay, OVO, ShopeePay</p>
+</div>
+</div>
+<div class="check-icon hidden w-6 h-6 rounded-full bg-secondary text-white items-center justify-center">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+</div>
+</label>
+<label class="method-card cursor-pointer block group">
+<input class="hidden" name="payment_method" type="radio" value="bank">
+<div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
+<span class="material-symbols-outlined text-secondary text-3xl">account_balance</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Bank Transfer</p>
+<p class="text-label-sm text-on-surface-variant uppercase">BCA, Mandiri, BNI, BRI</p>
+</div>
+</div>
+<div class="check-icon hidden w-6 h-6 rounded-full bg-secondary text-white items-center justify-center">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+</div>
+</label>
+<label class="method-card cursor-pointer block group">
+<input class="hidden" name="payment_method" type="radio" value="cash">
+<div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
+<span class="material-symbols-outlined text-secondary text-3xl">payments</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Pay at Cashier</p>
+<p class="text-label-sm text-on-surface-variant uppercase">Cash Payment on Pickup</p>
+</div>
+</div>
+<div class="check-icon hidden w-6 h-6 rounded-full bg-secondary text-white items-center justify-center">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+</div>
+</label>
+</div>
+</section>
+<section id="payment-detail" class="hidden">
+<div id="qris-detail" class="hidden glass-card p-lg rounded-xl noodle-glow animate-fade-in-up">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-secondary">qr_code_2</span>
+<h3 class="font-title-md text-title-md text-on-surface">Scan QRIS untuk Membayar</h3>
+</div>
+<div class="flex flex-col items-center gap-md">
+<div class="relative p-md bg-white rounded-2xl shadow-lg">
+<div class="w-56 h-56 qr-pattern rounded-lg relative">
+<div class="qr-corner top-0 left-0 border-r-0 border-b-0 rounded-tl-md"></div>
+<div class="qr-corner top-0 right-0 border-l-0 border-b-0 rounded-tr-md"></div>
+<div class="qr-corner bottom-0 left-0 border-r-0 border-t-0 rounded-bl-md"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center border-2 border-secondary">
+<span class="font-display-lg text-[14px] font-black text-secondary">W</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center w-full">
+<div class="flex items-center justify-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">schedule</span>
+<span class="font-label-sm text-on-surface-variant">Selesaikan pembayaran dalam</span>
+<span class="font-bold text-secondary" id="qris-timer">15:00</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-sm mb-sm">
+<p class="text-label-sm text-on-surface-variant mb-xs">Total Pembayaran</p>
+<p class="font-display-lg text-[24px] font-black text-secondary" id="qris-amount">Rp 0</p>
+</div>
+<div class="flex flex-wrap justify-center gap-xs">
+<span class="px-sm py-1 bg-surface-container-highest rounded-full text-label-sm font-bold text-on-surface-variant">Gopay</span>
+<span class="px-sm py-1 bg-surface-container-highest rounded-full text-label-sm font-bold text-on-surface-variant">OVO</span>
+<span class="px-sm py-1 bg-surface-container-highest rounded-full text-label-sm font-bold text-on-surface-variant">ShopeePay</span>
+<span class="px-sm py-1 bg-surface-container-highest rounded-full text-label-sm font-bold text-on-surface-variant">Dana</span>
+<span class="px-sm py-1 bg-surface-container-highest rounded-full text-label-sm font-bold text-on-surface-variant">LinkAja</span>
+</div>
+</div>
+<p class="text-label-sm text-on-surface-variant text-center max-w-xs">Buka aplikasi e-wallet favoritmu, scan kode QR di atas, dan konfirmasi pembayaran.</p>
+</div>
+</div>
+<div id="bank-detail" class="hidden glass-card p-lg rounded-xl noodle-glow animate-fade-in-up">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-secondary">account_balance</span>
+<h3 class="font-title-md text-title-md text-on-surface">Instruksi Transfer Bank</h3>
+</div>
+<div class="space-y-md">
+<div class="bg-surface-container-low rounded-xl p-md">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center">
+<span class="text-white font-black text-[14px]">BCA</span>
+</div>
+<span class="font-bold text-on-surface">Bank BCA</span>
+</div>
+<button onclick="copyToClipboard('8821-9920-1145', this)" class="flex items-center gap-xs px-sm py-1 bg-surface-container-highest hover:bg-surface-variant rounded-lg text-label-sm font-bold text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+Copy
+</button>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between">
+<span class="text-on-surface-variant text-label-sm">Nomor Virtual Account</span>
+<span class="font-bold text-on-surface font-mono">8821-9920-1145</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant text-label-sm">Atas Nama</span>
+<span class="font-bold text-on-surface">WARMINDO SEJAHTERA</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant text-label-sm">Jumlah Transfer</span>
+<span class="font-bold text-secondary" id="bank-amount">Rp 0</span>
+</div>
+</div>
+</div>
+<div class="bg-tertiary-container/10 rounded-xl p-md border-l-4 border-tertiary">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-[2px]">info</span>
+<div class="space-y-xs">
+<p class="font-label-sm text-on-tertiary-container font-bold">Penting - Selesaikan dalam 1 jam</p>
+<p class="text-label-sm text-on-tertiary-container/80">Transfer harus sesuai dengan jumlah tertera. Sistem akan otomatis mendeteksi pembayaran.</p>
+</div>
+</div>
+</div>
+<div class="space-y-sm">
+<p class="font-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Langkah-langkah:</p>
+<ol class="space-y-xs">
+<li class="flex items-start gap-sm text-body-md text-on-surface-variant">
+<span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-[2px]">1</span>
+<span>Buka ATM atau m-Banking pilihanmu</span>
+</li>
+<li class="flex items-start gap-sm text-body-md text-on-surface-variant">
+<span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-[2px]">2</span>
+<span>Pilih menu Transfer &gt; Virtual Account</span>
+</li>
+<li class="flex items-start gap-sm text-body-md text-on-surface-variant">
+<span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-[2px]">3</span>
+<span>Masukkan nomor VA: <span class="font-mono font-bold text-on-surface">8821-9920-1145</span></span>
+</li>
+<li class="flex items-start gap-sm text-body-md text-on-surface-variant">
+<span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-[2px]">4</span>
+<span>Konfirmasi dan selesaikan transfer</span>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="cash-detail" class="hidden glass-card p-lg rounded-xl noodle-glow animate-fade-in-up">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-secondary">payments</span>
+<h3 class="font-title-md text-title-md text-on-surface">Bayar di Kasir</h3>
+</div>
+<div class="flex flex-col items-center text-center gap-md">
+<div class="w-20 h-20 bg-tertiary-container/20 rounded-full flex items-center justify-center pulse-ring">
+<span class="material-symbols-outlined text-[40px] text-tertiary">storefront</span>
+</div>
+<div class="space-y-xs">
+<p class="font-body-lg text-on-surface">Silakan ke kasir untuk menyelesaikan pembayaran.</p>
+<p class="text-on-surface-variant">Sebutkan nomor meja dan pesananmu kepada kasir.</p>
+</div>
+<div class="bg-surface-container-low rounded-xl p-md w-full max-w-xs">
+<div class="flex justify-between mb-xs">
+<span class="text-label-sm text-on-surface-variant">Nomor Meja</span>
+<span class="font-bold text-on-surface">Table 12</span>
+</div>
+<div class="flex justify-between">
+<span class="text-label-sm text-on-surface-variant">Total Bayar</span>
+<span class="font-bold text-secondary" id="cash-amount">Rp 0</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="glass-card p-md rounded-xl">
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Voucher or Notes</h3>
+<div class="space-y-md">
+<div>
+<label class="block font-bold text-on-surface-variant mb-xs">Promo Code</label>
+<div class="flex gap-sm">
+<input class="flex-grow bg-surface-container-low border-2 border-transparent focus:border-secondary focus:ring-0 rounded-lg px-md py-sm transition-all outline-none" placeholder="WarmingUp2024" type="text" id="promo-code">
+<button class="px-md py-sm bg-primary-container text-on-primary-container font-bold rounded-lg hover:brightness-95 active:scale-95 transition-all" onclick="applyPromo()">Apply</button>
+</div>
+<p class="text-label-sm text-error hidden mt-xs" id="promo-error">Invalid promo code</p>
+<p class="text-label-sm text-tertiary hidden mt-xs" id="promo-success">Promo applied successfully!</p>
+</div>
+<div>
+<label class="block font-bold text-on-surface-variant mb-xs">Special Instructions</label>
+<textarea class="w-full bg-surface-container-low border-2 border-transparent focus:border-secondary focus:ring-0 rounded-lg px-md py-sm transition-all outline-none resize-none" placeholder="E.g. No spicy, extra egg fried hard..." rows="2" id="notes"></textarea>
+</div>
+</div>
+</section>
+<button class="w-full py-md rounded-xl btn-gradient text-white font-bold text-title-md shadow-lg shadow-secondary/20 transition-all flex items-center justify-center gap-sm overflow-hidden relative group" id="confirmBtn">
+<span class="relative z-10" id="btnText">Confirm & Pay Rp 0</span>
+<span class="hidden relative z-10 material-symbols-outlined animate-spin-slow" id="btnLoader">progress_activity</span>
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
+</button>
+<p class="text-center text-label-sm text-on-surface-variant">
+                    By clicking Confirm, you agree to our <a class="underline hover:text-secondary" href="#">Terms and Service</a>
+</p>
+</div>
+</div>
+</main>
+<footer class="w-full mt-auto bg-surface-container-lowest border-t border-outline-variant/30">
+<div class="flex flex-col md:flex-row justify-between items-center px-xl py-md gap-md max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-title-md text-title-md text-primary">Warmindo</span>
+<span class="text-on-surface-variant font-label-sm">2026 Indonesian Noodle Comfort</span>
+</div>
+<div class="flex gap-md">
+<a class="text-on-surface-variant/70 font-label-sm hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant/70 font-label-sm hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant/70 font-label-sm hover:text-secondary transition-colors" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-md hidden" id="successModal">
+<div class="absolute inset-0 bg-on-background/40 backdrop-blur-sm"></div>
+<div class="relative glass-card p-xl rounded-2xl max-w-md w-full text-center noodle-glow scale-95 opacity-0 transition-all duration-300" id="modalContent">
+<div class="w-20 h-20 bg-tertiary-container text-on-tertiary-container rounded-full flex items-center justify-center mx-auto mb-md">
+<span class="material-symbols-outlined text-5xl">check_circle</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Payment Successful!</h2>
+<p class="text-on-surface-variant mb-lg" id="success-message">Pembayaran berhasil! Pesananmu sedang diproses. Mengalihkan ke halaman status...</p>
+<button class="w-full py-sm bg-secondary text-white font-bold rounded-lg hover:brightness-95 transition-all" onclick="goToTracking()">View Live Status</button>
+</div>
+</div>
+<script>
+const SERVICE_CHARGE = 2000;
+const TAX_RATE = 0.10;
+const PROMO_CODES = {
+    'WARMINGUP2024': 0.10,
+    'NEWDISCOUNT': 0.15,
+    'CABE15': 0.15
+};
+
+let cart = [];
+let discount = 0;
+let qrisTimerInterval = null;
+let qrisSecondsLeft = 900;
+
+function loadCart() {
+    const saved = localStorage.getItem("warmindo_cart");
+
+    if (!saved) {
+        cart = [];
+        return;
+    }
+
+    cart = JSON.parse(saved).map(item => ({
+        ...item,
+        price: Number(item.price),
+        qty: Number(item.qty)
+    }));
+}
+
+function formatPrice(price) {
+    return 'Rp ' + Number(price).toLocaleString('id-ID');
+}
+
+function calculateTotals() {
+    const subtotal = cart.reduce((sum, item) => {
+        return sum + (Number(item.price) * Number(item.qty));
+    }, 0);
+
+    const discountAmount = subtotal * discount;
+    const subtotalAfterDiscount = subtotal - discountAmount;
+    const tax = Math.round(subtotalAfterDiscount * TAX_RATE);
+    const total = subtotalAfterDiscount + tax + SERVICE_CHARGE;
+
+    return {
+        subtotal,
+        discountAmount,
+        subtotalAfterDiscount,
+        tax,
+        total
+    };
+}   
+
+function renderOrderSummary() {
+    const itemsContainer = document.getElementById('order-items');
+
+    if (cart.length === 0) {
+        document.getElementById('payment-content').classList.add('hidden');
+        document.getElementById('empty-cart').classList.remove('hidden');
+        return;
+    }
+
+    document.getElementById('empty-cart').classList.add('hidden');
+    document.getElementById('payment-content').classList.remove('hidden');
+
+    itemsContainer.innerHTML = cart.map(item => `
+        <li class="flex justify-between text-body-md">
+            <span class="text-on-surface-variant">${item.name} ${item.qty > 1 ? `(${item.qty}x)` : ''}</span>
+            <span class="font-semibold text-on-surface">${formatPrice(item.price * item.qty)}</span>
+        </li>
+    `).join('');
+
+    const totals = calculateTotals();
+
+    document.getElementById('subtotal').textContent = formatPrice(totals.subtotal);
+
+    if (discount > 0) {
+        document.getElementById('subtotal').innerHTML = `
+            <span class="line-through text-on-surface-variant/50">${formatPrice(totals.subtotal)}</span>
+            <span class="ml-xs text-tertiary">${formatPrice(totals.subtotal - totals.discountAmount)}</span>
+        `;
+    }
+
+    document.getElementById('tax').textContent = formatPrice(totals.tax);
+    document.getElementById('total').textContent = formatPrice(totals.total);
+    document.getElementById('btnText').textContent = `Confirm & Pay ${formatPrice(totals.total)}`;
+
+    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cart-badge').textContent = totalItems;
+
+    document.getElementById('qris-amount').textContent = formatPrice(totals.total);
+    document.getElementById('bank-amount').textContent = formatPrice(totals.total);
+    document.getElementById('cash-amount').textContent = formatPrice(totals.total);
+}
+
+function applyPromo() {
+    const promoCode = document.getElementById('promo-code').value.trim().toUpperCase();
+    const promoError = document.getElementById('promo-error');
+    const promoSuccess = document.getElementById('promo-success');
+
+    promoError.classList.add('hidden');
+    promoSuccess.classList.add('hidden');
+
+    if (PROMO_CODES[promoCode]) {
+        discount = PROMO_CODES[promoCode];
+        promoSuccess.classList.remove('hidden');
+        promoSuccess.textContent = `Promo applied! ${Math.round(discount * 100)}% off`;
+        renderOrderSummary();
+    } else if (promoCode) {
+        promoError.classList.remove('hidden');
+        discount = 0;
+        renderOrderSummary();
+    }
+}
+
+function showPaymentDetail(method) {
+    const detailSection = document.getElementById('payment-detail');
+    const qrisDetail = document.getElementById('qris-detail');
+    const bankDetail = document.getElementById('bank-detail');
+    const cashDetail = document.getElementById('cash-detail');
+
+    qrisDetail.classList.add('hidden');
+    bankDetail.classList.add('hidden');
+    cashDetail.classList.add('hidden');
+
+    if (method === 'qris') {
+        detailSection.classList.remove('hidden');
+        qrisDetail.classList.remove('hidden');
+        startQrisTimer();
+    } else if (method === 'bank') {
+        detailSection.classList.remove('hidden');
+        bankDetail.classList.remove('hidden');
+        stopQrisTimer();
+    } else if (method === 'cash') {
+        detailSection.classList.remove('hidden');
+        cashDetail.classList.remove('hidden');
+        stopQrisTimer();
+    } else {
+        detailSection.classList.add('hidden');
+        stopQrisTimer();
+    }
+}
+
+function startQrisTimer() {
+    stopQrisTimer();
+    qrisSecondsLeft = 900;
+    updateQrisTimerDisplay();
+    qrisTimerInterval = setInterval(() => {
+        qrisSecondsLeft--;
+        if (qrisSecondsLeft <= 0) {
+            stopQrisTimer();
+            document.getElementById('qris-timer').textContent = '00:00';
+            document.getElementById('qris-timer').classList.add('text-error');
+        } else {
+            updateQrisTimerDisplay();
+        }
+    }, 1000);
+}
+
+function stopQrisTimer() {
+    if (qrisTimerInterval) {
+        clearInterval(qrisTimerInterval);
+        qrisTimerInterval = null;
+    }
+}
+
+function updateQrisTimerDisplay() {
+    const m = Math.floor(qrisSecondsLeft / 60).toString().padStart(2, '0');
+    const s = (qrisSecondsLeft % 60).toString().padStart(2, '0');
+    const el = document.getElementById('qris-timer');
+    if (el) {
+        el.textContent = `${m}:${s}`;
+        el.classList.remove('text-error');
+    }
+}
+
+function copyToClipboard(text, btn) {
+    const cleanText = text.replace(/-/g, '');
+    navigator.clipboard.writeText(cleanText).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span> Copied';
+        setTimeout(() => {
+          btn.innerHTML = original;
+        },1000);
+    });
+}
+
+        document.querySelectorAll('input[name="payment_method"]').forEach(input => {
+            input.addEventListener('change', function() {
+                showPaymentDetail(this.value);
+            });
+        });
+
+        document.getElementById("confirmBtn").onclick = async function () {
+            this.disabled = true;
+            document.getElementById("btnText").textContent = "Processing...";
+            document.getElementById("btnLoader").classList.remove("hidden");
+            await saveOrder();
+        };
+
+async function saveOrder() {
+
+    console.log("Cart :", cart);
+
+    if (cart.length === 0) {
+        alert("Cart kosong");
+        return;
+    }
+
+    const totals = calculateTotals();
+
+    const data = {
+        table_id: Number(localStorage.getItem("warmindo_table")),
+        customer_name: "Guest",
+        payment_method: document.querySelector("input[name=payment_method]:checked").value,
+        total: totals.total,
+        items: cart.map(item => ({
+            menu_id: Number(item.menu_id),
+            quantity: Number(item.qty),
+            price: Number(item.price)
+        }))
+    };
+
+    const res = await fetch("../api/save_order.php",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if(result.success){
+        localStorage.removeItem("warmindo_cart");
+        location.href = "tracking.html?order_id=" + result.order_id;
+    }else{
+        alert(result.message);
+    }
+
+}   // <-- WAJIB ADA
+
+window.onload = function() {
+    loadCart();
+    renderOrderSummary();
+    showPaymentDetail('qris');
+}
+</script>
+</body>
+</html>

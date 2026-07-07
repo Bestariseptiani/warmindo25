@@ -1,0 +1,17 @@
+Array
+(
+    [0] => Array
+        (
+            [menu_id] => 21
+            [quantity] => 1
+            [price] => 12000
+        )
+
+    [1] => Array
+        (
+            [menu_id] => 34
+            [quantity] => 1
+            [price] => 18000
+        )
+
+)
