@@ -130,6 +130,7 @@
         }
     </style>
 </head>
+
 <body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
 <!-- Top Navigation Bar (Shared Component) -->
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md dark:bg-on-background/80 border-b border-white/20 dark:border-white/10 shadow-md shadow-primary/10">
@@ -272,7 +273,14 @@
         };
 
         let currentStep = 2;
-        let timeLeft = 360; // 6 minutes in seconds
+        const DEFAULT_TIME = 360; // 6 menit
+            let endTime = localStorage.getItem("warmindo_eta_end");
+            if (!endTime) {
+                endTime = Date.now() + DEFAULT_TIME * 1000;
+                localStorage.setItem("warmindo_eta_end", endTime);
+            }
+        endTime = parseInt(endTime);
+
         const timerDisplay = document.getElementById('eta-display');
         const timerCircle = document.getElementById('timer-circle');
         const initialOffset = 600; // Stroke dasharray
@@ -281,62 +289,46 @@
             return 'Rp ' + price.toLocaleString('id-ID');
         }
 
-function loadOrderData() {
-
-    const receipt = JSON.parse(localStorage.getItem("warmindo_receipt"));
-
-    if(!receipt){
-        return;
-    }
-
-    fetch("../api/get_receipt.php?id=" + receipt.order_id)
-    .then(res => res.json())
-    .then(data => {
-
-        if(!data.success){
-            alert(data.message);
-            return;
+        function loadOrderData(){
+            const receipt = JSON.parse(localStorage.getItem("warmindo_receipt"));
+            if(!receipt){
+                return;
+            }
+            fetch("../api/get_receipt.php?id=" + receipt.order_id)
+            .then(res => res.json())
+            .then(data => {
+                if(!data.success){
+                    alert(data.message);
+                    return;
+                }
+                renderOrderItems(data.items, data.total);
+                if(data.order.nomor_meja){
+                    document.getElementById("table-number").textContent =
+                        "TABLE #" + data.order.nomor_meja;
+                }
+                updateStatusByOrder(data.order.status);
+            });
         }
 
-        renderOrderItems(data.items, data.total);
 
-        // tampilkan nomor meja
-        document.getElementById("table-number").textContent =
-            "TABLE #" + (data.order.nomor_meja || "--");
-
-        // tampilkan status order
-        updateStatusByOrder(data.order.status);
-
-    });
-
-}
-
-function updateStatusByOrder(status){
-
-    switch(status){
-
-        case "Pending":
-            updateStatus(1);
-            break;
-
-        case "Diproses":
-            updateStatus(2);
-            break;
-
-        case "Disajikan":
-            updateStatus(3);
-            break;
-
-        case "Selesai":
-            updateStatus(4);
-            break;
-
-        default:
-            updateStatus(1);
-
-    }
-
-}
+            function updateStatusByOrder(status){
+                switch(status){
+                    case "Pending":
+                        updateStatus(1);
+                        break;
+                    case "Diproses":
+                        updateStatus(2);
+                        break;
+                    case "Disajikan":
+                        updateStatus(3);
+                        break;
+                    case "Selesai":
+                        updateStatus(4);
+                        break;
+                    default:
+                        updateStatus(1);
+                }
+            }
 
 
         function renderOrderItems(items, total) {
@@ -426,30 +418,41 @@ function updateStatusByOrder(status){
             });
         }
 
-        const updateTimer = () => {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
+            function updateTimer(){
+                let timeLeft = Math.floor((endTime - Date.now()) / 1000);
+                if(timeLeft < 0){
+                    timeLeft = 0;
+                }
 
-            timerDisplay.textContent = minutes.toString().padStart(2, '0');
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
 
-            const progress = timeLeft / 360;
-            const offset = initialOffset * progress;
-            timerCircle.style.strokeDashoffset = offset;
+                timerDisplay.textContent =
+                    minutes.toString().padStart(2,"0");
 
-            if (timeLeft > 0) {
-                timeLeft--;
-            } else {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = "00";
-                updateStatus(4);
+                const progress = timeLeft / DEFAULT_TIME;
+
+                timerCircle.style.strokeDashoffset =
+                    initialOffset * progress;
+
+                if(timeLeft <= 0){
+                    clearInterval(timerInterval);
+                    localStorage.removeItem("warmindo_eta_end");
+                    updateStatus(4);
+                }
             }
-        };
 
         const timerInterval = setInterval(updateTimer, 1000);
         updateTimer();
 
-
-        window.onload = function(){
+       window.onload = function(){
+            loadCart?.();
+            const params = new URLSearchParams(window.location.search);
+            const table = params.get("table");
+            if(table){
+                document.getElementById("table-number").textContent =
+                    "TABLE #" + table;
+            }
             loadOrderData();
         };
     </script>

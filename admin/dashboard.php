@@ -322,7 +322,7 @@ function getActionButtons(order, status) {
     return `
         <button
             class="w-full bg-green-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition"
-            onclick="updateOrderStatus(${order.id}, 'Selesai')">
+            onclick="updateOrderStatus(${order.id}, 'Disajikan')"
             <span class="material-symbols-outlined">done_all</span>
             Selesai Masak
         </button>
@@ -475,8 +475,16 @@ async function loadOrders(){
 
     const pending = data.filter(o => o.status === "Pending");
     const cooking = data.filter(o => o.status === "Diproses");
-    const served = data.filter(o => o.status === "Selesai");
+    const served = data.filter(o => o.status === "Disajikan");
     const done = data.filter(o => o.status === "Batal");
+
+    const notificationBadge = document.getElementById("notification-badge");
+        notificationBadge.innerText = pending.length;
+        if (pending.length > 0) {
+            notificationBadge.style.display = "flex";
+        } else {
+            notificationBadge.style.display = "none";
+        }
 
     renderOrderList("pending-orders",pending,"pending");
     renderOrderList("cooking-orders",cooking,"cooking");

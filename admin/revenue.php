@@ -260,21 +260,13 @@ Export Report
         </div>
 
         <div class="flex items-center gap-3">
-
-            <select
-                id="status-filter"
-                class="px-4 py-2 rounded-xl border border-gray-300 bg-white shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none">
-
-                <option value="all">Semua Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Diproses">Diproses</option>
-                <option value="Selesai">Selesai</option>
-                <option value="Batal">Batal</option>
-
+            <select id="period-filter"
+                    class="px-4 py-2 rounded-xl border border-gray-300">
+                <option value="day">Per Day</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
             </select>
-
         </div>
-
     </div>
 
     <!-- Table -->
@@ -304,10 +296,6 @@ Export Report
 
                     <th class="px-6 py-4 text-right">
                         Amount
-                    </th>
-
-                    <th class="px-6 py-4 text-center">
-                        Status
                     </th>
 
                     <th class="px-6 py-4 text-center rounded-r-xl">
@@ -386,16 +374,28 @@ async function loadTransactions() {
         const response = await fetch("../api/get_revenue.php");
         const data = await response.json();
 
-        const filter = document.getElementById("status-filter").value;
+        const filter = document.getElementById("period-filter").value;
+        const now = new Date();
+        let transaksi = data.filter(item=>{
+            const t = new Date(item.order_time);
+            if(filter==="day"){
+                return t.getDate()===now.getDate()
+                    && t.getMonth()===now.getMonth()
+                    && t.getFullYear()===now.getFullYear();
+            }
 
-        let transaksi = data;
+            if(filter==="month"){
+                return t.getMonth()===now.getMonth()
+                    && t.getFullYear()===now.getFullYear();
+            }
 
-        if (filter !== "all") {
-            transaksi = data.filter(item => item.status === filter);
-        }
+            if(filter==="year"){
+                return t.getFullYear()===now.getFullYear();
+            }
+            return true;
+        });
 
         const tbody = document.getElementById("transactions-body");
-
         document.getElementById("showing-count").textContent = transaksi.length;
 
         if (transaksi.length === 0) {
@@ -409,7 +409,7 @@ async function loadTransactions() {
 
             document.getElementById("daily-revenue").textContent = "Rp 0";
             document.getElementById("monthly-revenue").textContent = "Rp 0";
-            document.getElementById("total-orders").textContent = "0";
+            document.getElementById("total-orders").textContent = data.length;
             return;
         }
 
@@ -418,16 +418,14 @@ async function loadTransactions() {
         let totalRevenue = 0;
 
         const today = new Date();
-
-        console.log(data);
-        
         data.forEach(item => {
-
             const amount = parseInt(item.total) || 0;
             const t = new Date(item.order_time);
 
+            // Total semua transaksi
             totalRevenue += amount;
 
+            // Pendapatan hari ini
             if (
                 t.getDate() === today.getDate() &&
                 t.getMonth() === today.getMonth() &&
@@ -436,46 +434,32 @@ async function loadTransactions() {
                 dailyRevenue += amount;
             }
 
+            // Pendapatan bulan ini
             if (
                 t.getMonth() === today.getMonth() &&
                 t.getFullYear() === today.getFullYear()
             ) {
                 monthlyRevenue += amount;
             }
-
         });
 
         document.getElementById("daily-revenue").textContent =
             formatPrice(dailyRevenue);
-
         document.getElementById("monthly-revenue").textContent =
             formatPrice(monthlyRevenue);
-
         document.getElementById("total-revenue").textContent =
             formatPrice(totalRevenue);
-
         document.getElementById("total-orders").textContent =
-            data.length;
+            transaksi.length;
 
 
-        tbody.innerHTML = transaksi.map(item => `
+        tbody.innerHTML = transaksi.map((item,index)=>`
             <tr>
                 <td>${new Date(item.order_time).toLocaleString("id-ID")}</td>
-                <td>#${item.id}</td>
+                <td>#${index + 1}</td>
                 <td>${item.nomor_meja ? "Meja " + item.nomor_meja : "-"}</td>
                 <td>${item.items ?? "-"}</td>
                 <td class="text-right">${formatPrice(parseInt(item.total))}</td>
-                <td class="text-center">
-                    ${
-                        item.status === "Pending"
-                        ? '<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">Pending</span>'
-                        : item.status === "Diproses"
-                        ? '<span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full">Diproses</span>'
-                        : item.status === "Selesai"
-                        ? '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">Selesai</span>'
-                        : '<span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">Batal</span>'
-                    }
-                </td>
                 <td class="text-center">
                     <button onclick="previewReceipt(${item.id})">🧾</button>
                 </td>
@@ -487,120 +471,103 @@ async function loadTransactions() {
     }
 }
 
-window.previewReceipt = async function(orderId){
+        window.previewReceipt = async function(orderId){
+            try{
+                const response = await fetch("../api/get_receipt.php?id=" + orderId);
+                const data = await response.json();
+                    if(!data.success){
+                        alert(data.message);
+                        return;
+                    }
+                const subtotal = data.items.reduce((total,item)=>{
+                    return total + parseInt(item.subtotal);
+                },0);
 
-    const response = await fetch("../api/get_receipt.php?id="+orderId);
+                    const tax = Math.round(subtotal * 0.10);
+                    const service = 2000;
+                    const total = subtotal + tax + service;
+                    const modalContent = document.getElementById("receipt-modal-content");
 
-    const data = await response.json();
-    const filter =
-    document.getElementById("status-filter").value;
-    let transaksi=data;
-    if(filter!="all"){
-        transaksi=data.filter(x=>x.status===filter);
-    }
-    if(!data){
-        alert("Receipt tidak ditemukan");
-        return;
-    }
+                modalContent.innerHTML = `
 
-    const subtotal=data.items.reduce((a,b)=>a+parseInt(b.price)*parseInt(b.quantity),0);
+        <div class="bg-white rounded-xl overflow-hidden shadow-xl">
+            <div class="p-5">
+                <h2 class="text-2xl font-bold text-center">
+                    Warmindo 25
+                </h2>
+                <p class="text-center text-gray-500 mb-4">
+                    Receipt
+                </p>
+                <hr class="mb-4">
+                <p><b>Order :</b> #${data.order.id}</p>
+                <p><b>Meja :</b> ${data.order.nomor_meja}</p>
+                <p><b>Customer :</b> ${data.order.customer_name}</p>
+                <p><b>Pembayaran :</b> ${data.order.payment_method}</p>
+                <p><b>Status :</b> ${data.order.status}</p>
+                <p><b>Waktu :</b> ${new Date(data.order.order_time).toLocaleString("id-ID")}</p>
+              
+                <hr class="my-4">
+                ${data.items.map(item=>`
+                    <div class="flex justify-between py-1">
+                        <span>${item.qty} x ${item.nama_menu}</span>
+                        <span>${formatPrice(item.subtotal)}</span>
+                    </div>
+                `).join("")}
 
-    const tax=Math.round(subtotal*0.10);
+                <hr class="my-4">
+                <div class="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>${formatPrice(subtotal)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Pajak (10%)</span>
+                    <span>${formatPrice(tax)}</span>
+                </div>
 
-    const service=2000;
+                <div class="flex justify-between">
+                    <span>Service</span>
+                    <span>${formatPrice(service)}</span>
+                </div>
 
-    const total=subtotal+tax+service;
+                <hr class="my-3">
+                <div class="flex justify-between font-bold text-xl">
+                    <span>Total</span>
+                    <span>${formatPrice(total)}</span>
+                </div>
 
-    const modalContent=document.getElementById("receipt-modal-content");
+                <div class="flex gap-3 mt-6">
+                    <button
+                        onclick="window.print()"
+                        class="flex-1 bg-blue-600 text-white rounded-lg py-2">
+                        Print
+                    </button>
 
-    modalContent.innerHTML=`
+                    <button
+                        onclick="closeReceipt()"
+                        class="flex-1 bg-red-600 text-white rounded-lg py-2">
 
-<div class="bg-white rounded-xl overflow-hidden shadow-xl">
+                        Close
 
-<div class="p-5">
+                    </button>
 
-<h2 class="text-2xl font-bold">Warmindo</h2>
+                </div>
 
-<p>Order #${data.id}</p>
+            </div>
 
-<p>Meja : ${data.nomor_meja ?? "-"}</p>
+        </div>
 
-<p>${new Date(data.order_time).toLocaleString("id-ID")}</p>
+        `;
 
-<hr class="my-3">
+                document.getElementById("receipt-modal").classList.remove("hidden");
 
-${data.items.map(item=>`
+            }catch(err){
 
-<div class="flex justify-between">
+                console.error(err);
+                alert("Gagal mengambil receipt.");
 
-<span>${item.quantity}x ${item.name}</span>
+            }
 
-<span>${formatPrice(item.price*item.quantity)}</span>
-
-</div>
-
-`).join("")}
-
-<hr class="my-3">
-
-<div class="flex justify-between">
-
-<span>Subtotal</span>
-
-<span>${formatPrice(subtotal)}</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Pajak</span>
-
-<span>${formatPrice(tax)}</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Service</span>
-
-<span>${formatPrice(service)}</span>
-
-</div>
-
-<div class="flex justify-between font-bold text-lg">
-
-<span>Total</span>
-
-<span>${formatPrice(total)}</span>
-
-</div>
-
-<div class="mt-5 flex gap-2">
-
-<button onclick="window.print()" class="bg-blue-500 text-white px-4 py-2 rounded">
-
-Print
-
-</button>
-
-<button onclick="closeReceipt()" class="bg-red-500 text-white px-4 py-2 rounded">
-
-Close
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-    document.getElementById("receipt-modal").classList.remove("hidden");
-
-}
-
+        }
 window.closeReceipt = function() {
     document.getElementById('receipt-modal').classList.add('hidden');
 };
@@ -609,7 +576,7 @@ window.exportReport = function() {
     alert('Exporting revenue report...');
 };
 
-document.getElementById('status-filter').addEventListener('change', loadTransactions);
+document.getElementById("period-filter").addEventListener("change",loadTransactions);
 
 setInterval(loadTransactions,3000);
 

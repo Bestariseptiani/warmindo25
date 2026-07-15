@@ -135,28 +135,81 @@
 </script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen pb-40">
-<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/20 shadow-md shadow-primary/10">
-  <div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto">
-    <a href="#" class="block"><h1 class="font-display-lg text-[24px] md:text-display-lg font-black text-secondary leading-none">Warmindo</h1></a>
-    <div class="hidden md:flex items-center gap-xs bg-primary-container/20 px-sm py-xs rounded-full border border-primary-container/30">
-      <span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
-      <span class="font-label-sm text-on-primary-container">Estimasi: 6 Menit</span>
-    </div>
-    <div class="flex items-center gap-md">
-      <a href="pelanggan/shoppingcart.html" class="relative active:scale-95 transition-transform">
-        <span class="material-symbols-outlined text-[28px] text-on-surface-variant hover:text-primary">shopping_cart</span>
-        <span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold" id="cart-badge">0</span>
-      </a>
-     <img class="w-10 h-10 rounded-full border-2 border-primary/20 shadow-sm" data-alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTkq3H18-WR9sMZV39i4Sjpd_yo-rsiVw0fuPNkZ5wkCtscVmVWiESN9vFl3g2lf2EIjkQQQYlzNqMitVk9zqmVmk5NnczrNPBLqeBKL_UREcXzQaaZAOe2oraWAjnrKr6OlD3zQ8DoQJovpeMX4YJPCF0M51QRkvMlh-MA10hWPcQQ0yery_heZnDF-h2s9TQmhYUYc3FzYzikrYOquzBUekvLxZiY6HuQPK6E7kwWmbNYLueBCkELR5Gf2yvfBTiBXG031ReF0g"/>
+    <div id="etaModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[9999]">
+      <div class="bg-white rounded-2xl p-6 w-[90%] max-w-md shadow-2xl">
+          <div class="text-center">
+             <span class="material-symbols-outlined text-6xl text-primary"> schedule </span>
+                 <h2 class="text-2xl font-bold mt-3"> Informasi Antrean Pesanan </h2>
+                  <p class="mt-2 text-gray-600"> Selamat datang di <b>Warmindo 25</b>. </p>
+
+                  <p class="text-gray-600 mb-5"> Sebelum melakukan pemesanan, berikut informasi kondisi antrean dapur saat ini. </p>
+
+                 <!-- Card Informasi -->
+                <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <div class="text-left">
+                            <p class="text-sm text-gray-500">
+                                Jumlah Antrean
+                            </p>
+                            <h2 id="queue-count" class="text-2xl font-bold text-primary"> 0 Porsi </h2>
+                       </div>            
+                     <div class="w-px h-12 bg-orange-300"></div>
+                  <div class="text-right">
+                    <p class="text-sm text-gray-500"> Estimasi Waktu </p>
+                    <h2 id="queue-eta" class="text-2xl font-bold text-orange-600"> 10 Menit </h2>
+                </div>
+            </div>
+         </div>
+
+            <button
+                onclick="closeETAModal()"
+                class="mt-6 w-full bg-primary hover:bg-secondary text-white py-3 rounded-xl font-semibold transition">
+                Mulai Memesan
+            </button>
+        </div>
       </div>
+  </div>
+  <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/20 shadow-md shadow-primary/10">
+      <div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto">
+
+          <!-- Logo -->
+          <a href="#" class="block">
+              <h1 class="font-display-lg text-[24px] md:text-display-lg font-black text-secondary leading-none">
+                  Warmindo
+              </h1>
+          </a>
+
+          <!-- Bagian kanan -->
+          <div class="flex items-center gap-md">
+              <!-- ETA Desktop -->
+              <div class="hidden md:flex items-center gap-xs bg-primary-container/20 px-sm py-xs rounded-full border border-primary-container/30">
+                  <span class="material-symbols-outlined text-primary"> schedule </span>
+                  <span id="eta-text" class="font-label-sm text-on-primary-container"> Estimasi: 10 Menit </span>
+              </div>
+
+              <!-- Cart -->
+              <a href="pelanggan/shoppingcart.html"
+                class="relative active:scale-95 transition-transform">
+
+                  <span class="material-symbols-outlined text-[28px] text-on-surface-variant hover:text-primary"> shopping_cart </span>
+
+                  <span id="cart-badge" class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold"> 0 </span>
+              </a>
+          </div>
       </div>
-      </header>
+  </header>
       <main class="pt-24 px-md max-w-container-max mx-auto">
-      <!-- Mobile ETA Badge -->
-      <div class="md:hidden flex items-center justify-center gap-xs bg-primary-container/10 mb-md py-sm rounded-xl border border-primary-container/20">
-      <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">timer</span>
-      <span class="font-title-md text-primary text-[16px]">Estimasi: 6 Menit</span>
-      </div>
+
+          <!-- Mobile ETA Badge -->
+            <div class="md:hidden flex items-center justify-center gap-xs bg-primary-container/10 mb-md py-sm rounded-xl border border-primary-container/20">
+            <span class="material-symbols-outlined text-primary">
+                timer
+            </span>
+            <span id="eta-text-mobile"
+                  class="font-title-md text-primary text-[16px]"> Estimasi: 10 Menit
+            </span>
+       </div>
+
       <!-- Hero Section / Search & Filter -->
       <section class="mb-lg space-y-md">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
@@ -225,6 +278,7 @@
 </div>
 <script>
   let MENU_CATALOG = {};
+  let totalAntrean = 0;
     function loadSavedQuantities() {
 
         // Kosongkan cart setiap membuka halaman menu
@@ -333,6 +387,20 @@
     }
 }
 
+      async function loadQueue(){
+          try{
+              const res = await fetch("api/get_queue.php");
+              const data = await res.json();
+              if(data.success){
+                  totalAntrean = data.total_porsi;
+              }
+          }catch(err){
+              console.log(err);
+              totalAntrean = 0;
+          }
+
+      }
+
   function addToCart(id) {
     const el = document.getElementById(`qty-${id}`);
     if (parseInt(el.innerText) === 0) {
@@ -345,29 +413,46 @@
     syncCartState();
   }
 
-  function syncCartState() {
-    let totalItems = 0;
-    let totalPrice = 0;
-    const cartItems = [];
-    Object.keys(MENU_CATALOG).forEach(id => {
-      const qty = parseInt(document.getElementById(`qty-${id}`)?.innerText || 0);
-      totalItems += qty;
-      totalPrice += qty * MENU_CATALOG[id].price;
-      if (qty > 0) {
-        cartItems.push({ ...MENU_CATALOG[id], qty });
-      }
-    });
-    localStorage.setItem('warmindo_cart', JSON.stringify(cartItems));
-    document.getElementById('cart-badge').innerText = totalItems;
-    document.getElementById('summary-items').innerText = `${totalItems} Item Terpilih`;
-    document.getElementById('total-price').innerText = `Rp${totalPrice.toLocaleString('id-ID')}`;
-    const cartSummary = document.getElementById('cart-summary');
-    if (totalItems > 0) {
-      cartSummary.classList.remove('translate-y-full');
-    } else {
-      cartSummary.classList.add('translate-y-full');
+      function syncCartState() {
+        let totalItems = 0;
+        let totalPrice = 0;
+        const cartItems = [];
+
+        Object.keys(MENU_CATALOG).forEach(id => {
+            const qty = parseInt(document.getElementById(`qty-${id}`)?.innerText || 0);
+
+            totalItems += qty;
+            totalPrice += qty * MENU_CATALOG[id].price;
+
+            if (qty > 0) {
+                cartItems.push({
+                    ...MENU_CATALOG[id],
+                    qty
+                });
+            }
+        });
+
+        // Simpan ke Local Storage
+        localStorage.setItem("warmindo_cart", JSON.stringify(cartItems));
+
+        // Update Badge & Ringkasan
+        document.getElementById("cart-badge").innerText = totalItems;
+        document.getElementById("summary-items").innerText = `${totalItems} Item Terpilih`;
+        document.getElementById("total-price").innerText =
+            `Rp${totalPrice.toLocaleString("id-ID")}`;
+
+        // Update ETA
+        updateETA(totalAntrean, totalItems);
+
+        // Tampilkan / Sembunyikan Ringkasan Keranjang
+        const cartSummary = document.getElementById("cart-summary");
+
+        if (totalItems > 0) {
+            cartSummary.classList.remove("translate-y-full");
+        } else {
+            cartSummary.classList.add("translate-y-full");
+        }
     }
-  }
 
   function goToCart() {
     window.location.href = 'pelanggan/shoppingcart.html';
@@ -414,10 +499,57 @@ function filterCategory(button, category){
         localStorage.setItem("warmindo_table", tableNumber);
     }
     
-  window.onload = async () => {
-    await loadMenu();
-    loadSavedQuantities();
-};
+    const KAPASITAS_DAPUR = 6;
+    const WAKTU_PRODUKSI = 10; // menit
+
+      function updateETA(totalAntrean, totalItems){
+          const modal = document.getElementById("etaModal");
+          const totalPorsi = totalAntrean + totalItems;
+
+          let eta = Math.ceil(totalPorsi / KAPASITAS_DAPUR) * WAKTU_PRODUKSI;
+          if(eta === 0){
+              eta = 10;
+          }
+          document.getElementById("eta-text").innerText =
+              `Estimasi: ${eta} Menit`;
+          document.getElementById("eta-text-mobile").innerText =
+              `Estimasi: ${eta} Menit`;
+          document.getElementById("queue-count").innerText =
+              totalPorsi + " Porsi";
+          document.getElementById("queue-eta").innerText =
+              eta + " Menit";
+
+          if(totalItems > 0 && totalPorsi > 6 && !popupClosed){
+              modal.classList.remove("hidden");
+              modal.classList.add("flex");
+          }else{
+              modal.classList.remove("flex");
+              modal.classList.add("hidden");
+          }
+      }
+
+      function closeETAModal(){
+          popupClosed = true;
+
+          const modal=document.getElementById("etaModal");
+
+          modal.classList.remove("flex");
+          modal.classList.add("hidden");
+
+      }
+
+      window.onload = async () => {
+          await loadQueue();
+          await loadMenu();
+          loadSavedQuantities();
+      };
+
+      setInterval(async()=>{
+          await loadQueue();
+          syncCartState();
+      },3000);
+
+      let popupClosed = false;
 </script>
 </body>
 </html>

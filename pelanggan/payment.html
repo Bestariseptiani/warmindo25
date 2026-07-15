@@ -700,13 +700,14 @@ async function saveOrder() {
     const result = await res.json();
 
     if(result.success){
+        const table = localStorage.getItem("warmindo_table");
         localStorage.removeItem("warmindo_cart");
-        location.href = "tracking.html?order_id=" + result.order_id;
+        location.href =
+            `tracking.html?order_id=${result.order_id}&table=${table}`;
     }else{
         alert(result.message);
     }
-
-}   // <-- WAJIB ADA
+}   
 
 window.onload = function() {
     loadCart();

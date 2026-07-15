@@ -9,9 +9,9 @@ Array
 
     [1] => Array
         (
-            [menu_id] => 34
+            [menu_id] => 16
             [quantity] => 1
-            [price] => 18000
+            [price] => 4000
         )
 
 )
