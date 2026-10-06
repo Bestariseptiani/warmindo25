@@ -167,28 +167,25 @@
 </head>
 <body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/20 shadow-md shadow-primary/10">
-<div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto h-16">
+<div class="flex justify-between items-center px-4 md:px-6 py-3 max-w-container-max mx-auto h-16">
 <a href="../index.html" class="font-display-lg text-display-lg font-black text-secondary transition-transform active:scale-95">Warmindo</a>
 <nav class="hidden md:flex gap-md items-center">
 <a class="text-on-surface-variant font-body-md font-semibold hover:text-primary transition-colors" href="../index.html">Menu</a>
 <a class="text-on-surface-variant font-body-md font-semibold hover:text-primary transition-colors" href="shoppingcart.html">Cart</a>
 <a class="text-secondary font-bold border-b-2 border-secondary pb-1" href="#">Payment</a>
 </nav>
-<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
 <button class="material-symbols-outlined text-primary hover:text-secondary transition-colors">table_restaurant</button>
 <a href="shoppingcart.html" class="relative">
 <button class="material-symbols-outlined text-primary hover:text-secondary transition-colors">shopping_cart</button>
 <span class="absolute -top-2 -right-2 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full" id="cart-badge">0</span>
 </a>
-<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
-<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjkxSzU6l6G27JbS14QRE6ajeTF4v4eLpLk9el7maTg2OaNd0SFIIbMpfrtI3SRtnmNtMAPjQfbyjUT3Os4dJfvNemZ2neHu5mpzCk0EFpzms0MfHjzY8ZITfumg-98sajKoCho-JrK4P-GoXczLIW0EMM2D9jI5W0t7kX5H5HqKIWbeTSSwUooZtLTWsAHyR8c2UQlh_eaxisBV_muyaGId8Qoy2zD4TI-VUPRtVqTGb_U42DRL_gVnOcm0gBYI-ovnfQQ2DBcqU" alt="Profile">
-</div>
 </div>
 </div>
 </header>
-<main class="flex-grow pt-24 pb-12 px-md max-w-4xl mx-auto w-full relative">
+<main class="flex-grow pt-20 md:pt-24 pb-8 px-4 md:px-6 max-w-6xl mx-auto w-full relative">
 <div class="mb-lg">
-<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Almost there!</h1>
+<h1 class="text-3xl md:text-4xl font-bold text-on-surface mb-2">Almost there!</h1>
 <p class="text-on-surface-variant font-body-lg">Choose your preferred payment method to enjoy your delicious meal.</p>
 </div>
 <div id="empty-cart" class="hidden glass-card p-xl rounded-xl text-center noodle-glow">
@@ -201,7 +198,7 @@ Browse Menu
 </a>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg" id="payment-content">
-<aside class="md:col-span-1 md:order-last">
+<aside class="order-last md:col-span-1">
 <div class="glass-card p-md rounded-xl noodle-glow sticky top-24">
 <h2 class="font-title-md text-title-md text-on-surface mb-md">Order Summary</h2>
 <ul class="space-y-sm mb-md" id="order-items"></ul>
@@ -232,7 +229,7 @@ Browse Menu
 <label class="method-card cursor-pointer block group">
 <input checked class="hidden" name="payment_method" type="radio" value="qris">
 <div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
-<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
 <div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
 <span class="material-symbols-outlined text-secondary text-3xl">qr_code</span>
 </div>
@@ -249,7 +246,7 @@ Browse Menu
 <label class="method-card cursor-pointer block group">
 <input class="hidden" name="payment_method" type="radio" value="bank">
 <div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
-<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
 <div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
 <span class="material-symbols-outlined text-secondary text-3xl">account_balance</span>
 </div>
@@ -266,7 +263,7 @@ Browse Menu
 <label class="method-card cursor-pointer block group">
 <input class="hidden" name="payment_method" type="radio" value="cash">
 <div class="flex items-center justify-between p-md border-2 border-outline-variant/30 rounded-xl bg-surface-container-lowest transition-all group-hover:border-primary/50">
-<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
 <div class="w-12 h-12 flex items-center justify-center bg-surface rounded-lg">
 <span class="material-symbols-outlined text-secondary text-3xl">payments</span>
 </div>
@@ -414,24 +411,6 @@ Copy
 </div>
 </div>
 </section>
-<section class="glass-card p-md rounded-xl">
-<h3 class="font-title-md text-title-md text-on-surface mb-md">Voucher or Notes</h3>
-<div class="space-y-md">
-<div>
-<label class="block font-bold text-on-surface-variant mb-xs">Promo Code</label>
-<div class="flex gap-sm">
-<input class="flex-grow bg-surface-container-low border-2 border-transparent focus:border-secondary focus:ring-0 rounded-lg px-md py-sm transition-all outline-none" placeholder="WarmingUp2024" type="text" id="promo-code">
-<button class="px-md py-sm bg-primary-container text-on-primary-container font-bold rounded-lg hover:brightness-95 active:scale-95 transition-all" onclick="applyPromo()">Apply</button>
-</div>
-<p class="text-label-sm text-error hidden mt-xs" id="promo-error">Invalid promo code</p>
-<p class="text-label-sm text-tertiary hidden mt-xs" id="promo-success">Promo applied successfully!</p>
-</div>
-<div>
-<label class="block font-bold text-on-surface-variant mb-xs">Special Instructions</label>
-<textarea class="w-full bg-surface-container-low border-2 border-transparent focus:border-secondary focus:ring-0 rounded-lg px-md py-sm transition-all outline-none resize-none" placeholder="E.g. No spicy, extra egg fried hard..." rows="2" id="notes"></textarea>
-</div>
-</div>
-</section>
 <button class="w-full py-md rounded-xl btn-gradient text-white font-bold text-title-md shadow-lg shadow-secondary/20 transition-all flex items-center justify-center gap-sm overflow-hidden relative group" id="confirmBtn">
 <span class="relative z-10" id="btnText">Confirm & Pay Rp 0</span>
 <span class="hidden relative z-10 material-symbols-outlined animate-spin-slow" id="btnLoader">progress_activity</span>
@@ -468,16 +447,8 @@ Copy
 </div>
 </div>
 <script>
-const SERVICE_CHARGE = 2000;
-const TAX_RATE = 0.10;
-const PROMO_CODES = {
-    'WARMINGUP2024': 0.10,
-    'NEWDISCOUNT': 0.15,
-    'CABE15': 0.15
-};
 
 let cart = [];
-let discount = 0;
 let qrisTimerInterval = null;
 let qrisSecondsLeft = 900;
 
@@ -485,39 +456,40 @@ function loadCart() {
     const saved = localStorage.getItem("warmindo_cart");
 
     if (!saved) {
+        console.log("Cart kosong");
         cart = [];
         return;
     }
 
-    cart = JSON.parse(saved).map(item => ({
-        ...item,
-        price: Number(item.price),
-        qty: Number(item.qty)
-    }));
+    cart = JSON.parse(saved);
+    console.log(cart);
 }
 
 function formatPrice(price) {
     return 'Rp ' + Number(price).toLocaleString('id-ID');
 }
 
+const TAX_RATE = 0.10;
+const SERVICE_CHARGE = 2000;
+
 function calculateTotals() {
     const subtotal = cart.reduce((sum, item) => {
         return sum + (Number(item.price) * Number(item.qty));
     }, 0);
 
-    const discountAmount = subtotal * discount;
-    const subtotalAfterDiscount = subtotal - discountAmount;
-    const tax = Math.round(subtotalAfterDiscount * TAX_RATE);
-    const total = subtotalAfterDiscount + tax + SERVICE_CHARGE;
+        const tax = Math.round(subtotal * TAX_RATE);
+        const total = subtotal + tax + SERVICE_CHARGE;
 
-    return {
+
+        return {
         subtotal,
-        discountAmount,
-        subtotalAfterDiscount,
         tax,
         total
-    };
-}   
+       };
+    }   
+
+    console.log(localStorage.getItem("warmindo_cart"));
+    console.log(cart);
 
 function renderOrderSummary() {
     const itemsContainer = document.getElementById('order-items');
@@ -542,12 +514,6 @@ function renderOrderSummary() {
 
     document.getElementById('subtotal').textContent = formatPrice(totals.subtotal);
 
-    if (discount > 0) {
-        document.getElementById('subtotal').innerHTML = `
-            <span class="line-through text-on-surface-variant/50">${formatPrice(totals.subtotal)}</span>
-            <span class="ml-xs text-tertiary">${formatPrice(totals.subtotal - totals.discountAmount)}</span>
-        `;
-    }
 
     document.getElementById('tax').textContent = formatPrice(totals.tax);
     document.getElementById('total').textContent = formatPrice(totals.total);
@@ -559,26 +525,6 @@ function renderOrderSummary() {
     document.getElementById('qris-amount').textContent = formatPrice(totals.total);
     document.getElementById('bank-amount').textContent = formatPrice(totals.total);
     document.getElementById('cash-amount').textContent = formatPrice(totals.total);
-}
-
-function applyPromo() {
-    const promoCode = document.getElementById('promo-code').value.trim().toUpperCase();
-    const promoError = document.getElementById('promo-error');
-    const promoSuccess = document.getElementById('promo-success');
-
-    promoError.classList.add('hidden');
-    promoSuccess.classList.add('hidden');
-
-    if (PROMO_CODES[promoCode]) {
-        discount = PROMO_CODES[promoCode];
-        promoSuccess.classList.remove('hidden');
-        promoSuccess.textContent = `Promo applied! ${Math.round(discount * 100)}% off`;
-        renderOrderSummary();
-    } else if (promoCode) {
-        promoError.classList.remove('hidden');
-        discount = 0;
-        renderOrderSummary();
-    }
 }
 
 function showPaymentDetail(method) {
@@ -676,18 +622,23 @@ async function saveOrder() {
     }
 
     const totals = calculateTotals();
+    alert(localStorage.getItem("customer_name"));
 
-    const data = {
-        table_id: Number(localStorage.getItem("warmindo_table")),
-        customer_name: "Guest",
-        payment_method: document.querySelector("input[name=payment_method]:checked").value,
-        total: totals.total,
-        items: cart.map(item => ({
-            menu_id: Number(item.menu_id),
-            quantity: Number(item.qty),
-            price: Number(item.price)
-        }))
-    };
+    const customerName = localStorage.getItem("customer_name");
+
+    alert("Customer = " + customerName);
+
+        const data = {
+            table_id: Number(localStorage.getItem("warmindo_table")),
+            customer_name: customerName,
+            payment_method: document.querySelector("input[name=payment_method]:checked").value,
+            total: totals.total,
+            items: cart.map(item => ({
+                menu_id: Number(item.menu_id),
+                quantity: Number(item.qty),
+                price: Number(item.price)
+            }))
+        };
 
     const res = await fetch("../api/save_order.php",{
         method:"POST",
@@ -707,7 +658,7 @@ async function saveOrder() {
     }else{
         alert(result.message);
     }
-}   
+}
 
 window.onload = function() {
     loadCart();

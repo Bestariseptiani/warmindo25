@@ -212,29 +212,47 @@ form.addEventListener("submit", async function(e){
 
     e.preventDefault();
 
-    const username=document.getElementById("username").value;
-    const password=document.getElementById("password").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-    const response=await fetch("../api/login.php",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
+    const response = await fetch("../api/login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
         },
-        body:JSON.stringify({
-            username:username,
-            password:password
+        body: JSON.stringify({
+            username: username,
+            password: password
         })
     });
 
-    const result=await response.json();
+    const result = await response.json();
 
     if(result.success){
 
-        window.location.href="dashboard.php";
+        if(result.role === "admin"){
+
+            window.location.href = "dashboard.php";
+
+        }else if(result.role === "kitchen"){
+
+            window.location.href = "../kitchen/dashboard.php";
+
+        }else if(result.role === "owner"){
+
+            window.location.href = "../owner/dashboard.php";
+
+        }else{
+
+            errorDiv.classList.remove("hidden");
+            errorDiv.querySelector("span:last-child").textContent = "Role tidak dikenali!";
+
+        }
 
     }else{
 
         errorDiv.classList.remove("hidden");
+        errorDiv.querySelector("span:last-child").textContent = "Username atau password salah!";
 
     }
 

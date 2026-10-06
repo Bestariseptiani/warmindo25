@@ -1,0 +1,18 @@
+Array
+(
+    [table_id] => 1
+    [customer_name] => Grace
+    [payment_method] => qris
+    [total] => 112000
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [menu_id] => 14
+                    [quantity] => 4
+                    [price] => 25000
+                )
+
+        )
+
+)

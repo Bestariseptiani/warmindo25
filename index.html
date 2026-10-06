@@ -40,6 +40,43 @@
         #cart-summary {
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        @media (max-width: 768px){
+
+    body{
+        padding-bottom:180px;
+    }
+
+    .glass-card{
+        border-radius:18px;
+    }
+
+    #menu-list{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .menu-item img{
+        height:160px;
+    }
+
+    #cart-summary .glass-card{
+        padding:16px;
+    }
+
+    #cart-summary button{
+        width:100%;
+    }
+
+    .category-btn{
+        white-space:nowrap;
+        flex-shrink:0;
+    }
+
+    .no-scrollbar::-webkit-scrollbar{
+        display:none;
+    }
+
+}
 </style>
 <script id="tailwind-config">
       tailwind.config = {
@@ -170,7 +207,7 @@
       </div>
   </div>
   <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/20 shadow-md shadow-primary/10">
-      <div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto">
+      <div class="flex justify-between items-center px-4 py-3 max-w-container-max mx-auto">
 
           <!-- Logo -->
           <a href="#" class="block">
@@ -198,7 +235,7 @@
           </div>
       </div>
   </header>
-      <main class="pt-24 px-md max-w-container-max mx-auto">
+      <main class="pt-20 px-4 md:px-6 max-w-container-max mx-auto">
 
           <!-- Mobile ETA Badge -->
             <div class="md:hidden flex items-center justify-center gap-xs bg-primary-container/10 mb-md py-sm rounded-xl border border-primary-container/20">
@@ -217,7 +254,7 @@
       <h2 class="font-headline-lg-mobile md:font-headline-lg text-on-background">Selamat Datang!</h2>
       <p class="text-on-surface-variant">Pilih menu favoritmu dan nikmati hidangan hangat kami.</p>
       </div>
-      <div class="relative w-full md:w-80">
+      <div class="relative w-full">
     <input
     id="search-input"
     class="w-full pl-12 pr-4 py-3 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-secondary/50 text-body-md outline-none"
@@ -253,7 +290,7 @@
 </main>
 <div class="fixed bottom-0 left-0 w-full z-40 px-md pb-md pointer-events-none translate-y-full" id="cart-summary">
   <div class="max-w-container-max mx-auto pointer-events-auto">
-    <div class="glass-card p-md rounded-[28px] shadow-2xl shadow-primary/20 flex flex-col md:flex-row items-center justify-between gap-md">
+    <div class="glass-card p-4 rounded-2xl shadow-2xl shadow-primary/20 flex flex-col md:flex-row items-center justify-between gap-md">
       <div class="flex items-center gap-md">
         <div class="w-14 h-14 menu-gradient rounded-2xl flex items-center justify-center text-white">
           <span class="material-symbols-outlined text-[32px]">shopping_bag</span>
@@ -263,12 +300,12 @@
           <p class="text-label-sm text-outline">Belum termasuk biaya layanan</p>
         </div>
       </div>
-      <div class="flex items-center gap-lg w-full md:w-auto">
+      <div class="flex flex-col md:flex-row gap-4 w-full">
         <div class="text-right flex-1 md:flex-none">
           <p class="text-label-sm text-outline uppercase font-bold tracking-widest">Total Bayar</p>
           <p class="font-headline-lg-mobile text-secondary leading-none" id="total-price">Rp0</p>
         </div>
-        <button onclick="goToCart()" class="menu-gradient text-white px-xl py-md rounded-2xl font-title-md shadow-xl shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all w-full md:w-auto flex items-center justify-center gap-sm">
+        <button onclick="goToCart()" class="menu-gradient text-white w-full md:w-auto py-3 rounded-xl font-semibold" rounded-2xl font-title-md shadow-xl shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all w-full md:w-auto flex items-center justify-center gap-sm">
           <span>Checkout</span>
           <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
         </button>
@@ -324,21 +361,21 @@
           };
 
             container.innerHTML += `
-            <div class="menu-item category-${menu.kategori} glass-card rounded-[24px] overflow-hidden group noodle-glow">
+            <div class="menu-item glass-card rounded-2xl overflow-hidden group shadow-lg">
 
-                <div class="relative h-48 overflow-hidden">
+                <div class="relative h-40 md:h-48 overflow-hidden">
                     <img
                     src="./assets/images/${menu.gambar}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onerror="this.style.border='2px solid red'; console.log(this.src)">
                 </div>
 
-                <div class="p-md space-y-sm">
+                <div class="p-4 space-y-3">
 
                     <div class="flex justify-between">
 
                         <div>
-                            <h3 class="font-title-md">${menu.nama_menu}</h3>
+                            <h3 class="text-lg font-bold">${menu.nama_menu}</h3>
                             <p class="text-label-sm">${menu.deskripsi}</p>
                         </div>
 
@@ -350,7 +387,7 @@
 
                     <div class="flex justify-between items-center">
 
-                        <div class="flex items-center gap-xs bg-surface-container-low p-1 rounded-lg">
+                        <div class="flex items-center gap-2 bg-surface-container-low rounded-xl px-2 py-2">
 
                             <button onclick="updateQty('${id}',-1)">
                                 -
@@ -365,7 +402,7 @@
                         </div>
 
                         <button
-                            class="menu-gradient text-white px-md py-2 rounded-xl"
+                            class="menu-gradient text-white px-5 py-2 rounded-xl text-sm font-semibold"
                             onclick="addToCart('${id}')">
 
                             Pesan

@@ -247,88 +247,137 @@ Export Report
 
 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
 
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-6 py-5 bg-gray-50 border-b">
+<!-- Header Transaction -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 px-6 py-6 bg-gray-50 border-b border-gray-200">
 
-        <div>
-            <h2 class="text-xl font-bold text-gray-800">
-                Transaction History
-            </h2>
-            <p class="text-sm text-gray-500">
-                Semua riwayat transaksi pelanggan
-            </p>
-        </div>
+    <!-- Judul -->
+    <div>
+        <h2 class="text-3xl font-bold text-gray-800">
+            Transaction History
+        </h2>
 
-        <div class="flex items-center gap-3">
-            <select id="period-filter"
-                    class="px-4 py-2 rounded-xl border border-gray-300">
-                <option value="day">Per Day</option>
-                <option value="month">Per Month</option>
-                <option value="year">Per Year</option>
-            </select>
-        </div>
+        <p class="mt-1 text-sm text-gray-500">
+            View and manage all customer transaction history.
+        </p>
     </div>
 
-    <!-- Table -->
-    <div class="overflow-x-auto px-5 py-5">
+    <!-- Filter -->
+    <div class="flex items-center gap-3">
 
-        <table class="min-w-full">
+        <!-- Filter Utama -->
+        <select
+            id="period-filter"
+            class="h-11 min-w-[150px] rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
 
-            <thead>
+            <option value="day">Hari Ini</option>
+            <option value="month">Monthly</option>
+            <option value="year">Year</option>
 
-                <tr class="bg-orange-50 text-gray-700 uppercase text-sm">
+        </select>
 
-                    <th class="px-6 py-4 text-left rounded-l-xl">
-                        Date & Time
-                    </th>
+        <!-- Filter Bulan -->
+        <select
+            id="month-filter"
+            class="hidden h-11 min-w-[170px] rounded-xl border border-gray-300 bg-white px-4 text-sm shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
 
-                    <th class="px-6 py-4 text-left">
-                        Order ID
-                    </th>
+            <option value="0">Januari</option>
+            <option value="1">Februari</option>
+            <option value="2">Maret</option>
+            <option value="3">April</option>
+            <option value="4">Mei</option>
+            <option value="5">Juni</option>
+            <option value="6">Juli</option>
+            <option value="7">Agustus</option>
+            <option value="8">September</option>
+            <option value="9">Oktober</option>
+            <option value="10">November</option>
+            <option value="11">Desember</option>
 
-                    <th class="px-6 py-4 text-left">
-                        Table
-                    </th>
+        </select>
 
-                    <th class="px-6 py-4 text-left">
-                        Items
-                    </th>
+        <!-- Filter Tahun -->
+        <select
+            id="year-filter"
+            class="hidden h-11 min-w-[130px] rounded-xl border border-gray-300 bg-white px-4 text-sm shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
 
-                    <th class="px-6 py-4 text-right">
-                        Amount
-                    </th>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026" selected>2026</option>
 
-                    <th class="px-6 py-4 text-center rounded-r-xl">
-                        Receipt
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody
-                id="transactions-body"
-                class="divide-y divide-gray-200">
-
-                <tr>
-
-                    <td colspan="7" class="py-12 text-center text-gray-500">
-
-                        <span class="material-symbols-outlined animate-spin text-3xl mb-2">
-                            progress_activity
-                        </span>
-
-                        <p>Loading transactions...</p>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
+        </select>
 
     </div>
+
+</div>
+
+   <!-- Table -->
+<div class="overflow-x-auto px-6 pb-6">
+
+    <table class="w-full border-collapse">
+
+        <!-- Header -->
+        <thead class="bg-orange-50">
+
+            <tr class="border border-gray-300">
+
+                <th class="px-5 py-4 text-left font-semibold border border-gray-300">
+                    DATE & TIME
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold border border-gray-300">
+                    ORDER ID
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold border border-gray-300">
+                    TABLE
+                </th>
+
+                <th class="px-5 py-4 text-left font-semibold border border-gray-300">
+                    ITEMS
+                </th>
+
+                <th class="px-5 py-4 text-right font-semibold border border-gray-300">
+                    AMOUNT
+                </th>
+
+                <th class="px-5 py-4 text-center font-semibold border border-gray-300">
+                    RECEIPT
+                </th>
+                
+            </tr>
+
+        </thead>
+
+        <!-- Body -->
+        <tbody
+            id="transactions-body"
+            class="bg-white">
+
+            <tr class="border-b border-gray-200">
+
+                <td colspan="6" class="py-12 text-center text-gray-500">
+
+                    <span class="material-symbols-outlined animate-spin text-3xl">
+                        progress_activity
+                    </span>
+
+                    <p class="mt-2">
+                        Loading transactions...
+                    </p>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
 
     <!-- Footer -->
 
@@ -350,7 +399,7 @@ Export Report
 <footer class="w-full mt-auto border-t border-outline-variant/30 bg-surface-container-lowest flex flex-col md:flex-row justify-between items-center px-xl py-md gap-md">
 <div class="flex flex-col md:flex-row items-center gap-md">
 <span class="font-title-md text-title-md text-primary">Warmindo</span>
-<span class="font-label-sm text-label-sm text-on-surface-variant/70">2024 Powered by Warmindo</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70">2026 Powered by Warmindo</span>
 </div>
 <div class="flex gap-md">
 <a class="font-label-sm text-label-sm text-on-surface-variant/70 hover:text-secondary transition-colors" href="#">Privacy Policy</a>
@@ -375,6 +424,8 @@ async function loadTransactions() {
         const data = await response.json();
 
         const filter = document.getElementById("period-filter").value;
+        const selectedMonth = parseInt(document.getElementById("month-filter").value);
+        const selectedYear = parseInt(document.getElementById("year-filter").value);
         const now = new Date();
         let transaksi = data.filter(item=>{
             const t = new Date(item.order_time);
@@ -383,14 +434,12 @@ async function loadTransactions() {
                     && t.getMonth()===now.getMonth()
                     && t.getFullYear()===now.getFullYear();
             }
-
             if(filter==="month"){
-                return t.getMonth()===now.getMonth()
+                return t.getMonth()===selectedMonth
                     && t.getFullYear()===now.getFullYear();
             }
-
             if(filter==="year"){
-                return t.getFullYear()===now.getFullYear();
+                return t.getFullYear()===selectedYear;
             }
             return true;
         });
@@ -568,19 +617,41 @@ async function loadTransactions() {
             }
 
         }
-window.closeReceipt = function() {
-    document.getElementById('receipt-modal').classList.add('hidden');
-};
 
-window.exportReport = function() {
-    alert('Exporting revenue report...');
-};
+            const period = document.getElementById("period-filter");
+            const monthFilter = document.getElementById("month-filter");
+            const yearFilter = document.getElementById("year-filter");
 
-document.getElementById("period-filter").addEventListener("change",loadTransactions);
+            period.addEventListener("change", () => {
 
-setInterval(loadTransactions,3000);
+                monthFilter.classList.add("hidden");
+                yearFilter.classList.add("hidden");
 
-loadTransactions();
+                if(period.value==="month"){
+                    monthFilter.classList.remove("hidden");
+                }
+
+                if(period.value==="year"){
+                    yearFilter.classList.remove("hidden");
+                }
+
+                loadTransactions();
+
+            });
+
+            monthFilter.addEventListener("change",loadTransactions);
+            yearFilter.addEventListener("change",loadTransactions);
+
+            window.closeReceipt = function() {
+                document.getElementById('receipt-modal').classList.add('hidden');
+            };
+            window.exportReport = function() {
+                alert('Exporting revenue report...');
+            };
+
+        document.getElementById("period-filter").addEventListener("change",loadTransactions);
+        setInterval(loadTransactions,3000);
+        loadTransactions();
 </script>
 </body>
 </html>

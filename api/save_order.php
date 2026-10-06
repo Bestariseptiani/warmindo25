@@ -14,108 +14,134 @@ if (!$data) {
     exit;
 }
 
-$table_id      = intval($data["table_id"]);
-$customer_name = mysqli_real_escape_string($conn, $data["customer_name"]);
-$payment       = mysqli_real_escape_string($conn, $data["payment_method"]);
-$total         = intval($data["total"]);
-$items         = $data["items"];
-
-// Debug (boleh dihapus nanti)
+// Debug request (hapus jika sudah selesai testing)
 file_put_contents(
-    "debug_cart.txt",
-    print_r($items, true)
+    "debug_request.txt",
+    print_r($data, true)
 );
+
+$table_id = intval($data["table_id"] ?? 0);
+$customer_name = trim($data["customer_name"] ?? "Guest");
+$payment = trim($data["payment_method"] ?? "cash");
+$total = intval($data["total"] ?? 0);
+$items = $data["items"] ?? [];
+
+$customer_name = mysqli_real_escape_string($conn, $customer_name);
+$payment = mysqli_real_escape_string($conn, $payment);
 
 mysqli_begin_transaction($conn);
 
 try {
 
-    // Simpan order
-    $insertOrder = mysqli_query($conn, "
-        INSERT INTO orders
-        (table_id, customer_name, total, payment_method, status)
-        VALUES
-        (
-            '$table_id',
-            '$customer_name',
-            '$total',
-            '$payment',
-            'Pending'
-        )
-    ");
+    // Simpan Order
+    $sql = "
+INSERT INTO orders
+(
+table_id,
+customer_name,
+total,
+payment_method,
+payment_status,
+status
+)
+VALUES
+(
+'$table_id',
+'$customer_name',
+'$total',
+'$payment',
+'Belum Dibayar',
+'Menunggu Pembayaran'
+)
+    ";
 
-    if (!$insertOrder) {
+    if (!mysqli_query($conn, $sql)) {
         throw new Exception(mysqli_error($conn));
     }
 
-$order_id = mysqli_insert_id($conn);
+    $order_id = mysqli_insert_id($conn);
 
-// Ubah status meja
-$updateTable = mysqli_query($conn, "
-    UPDATE tables
-    SET status='Terisi'
-    WHERE id='$table_id'
-");
-
-if (!$updateTable || mysqli_affected_rows($conn) == 0) {
-    throw new Exception("Meja tidak ditemukan.");
-}
-
-// Simpan item
-foreach ($items as $item) {
-
-    $menu_id  = intval($item["menu_id"]);
-    $qty      = intval($item["quantity"]);
-    $price    = intval($item["price"]);
-    $subtotal = $qty * $price;
-
-    $insertItem = mysqli_query($conn, "
-        INSERT INTO order_items
-        (order_id, menu_id, quantity, price, subtotal)
-        VALUES
-        (
-            '$order_id',
-            '$menu_id',
-            '$qty',
-            '$price',
-            '$subtotal'
-        )
+    // Update status meja
+    $updateTable = mysqli_query($conn,"
+        UPDATE tables
+        SET status='Terisi'
+        WHERE id='$table_id'
     ");
 
-    if (!$insertItem) {
+    if(!$updateTable){
         throw new Exception(mysqli_error($conn));
     }
-}
-    // Simpan receipt
-    $insertReceipt = mysqli_query($conn, "
+
+    // Simpan Order Items
+    foreach($items as $item){
+
+        $menu_id = intval($item["menu_id"]);
+        $qty = intval($item["quantity"]);
+        $price = intval($item["price"]);
+        $subtotal = $qty * $price;
+
+        $sqlItem = "
+            INSERT INTO order_items
+            (
+                order_id,
+                menu_id,
+                quantity,
+                price,
+                subtotal
+            )
+            VALUES
+            (
+                '$order_id',
+                '$menu_id',
+                '$qty',
+                '$price',
+                '$subtotal'
+            )
+        ";
+
+        if(!mysqli_query($conn,$sqlItem)){
+            throw new Exception(mysqli_error($conn));
+        }
+
+    }
+
+    // Simpan Receipt
+    $sqlReceipt = "
         INSERT INTO receipts
-        (order_id, receipt_number, total, payment_status)
+        (
+            order_id,
+            receipt_number,
+            total,
+            payment_status
+        )
         VALUES
         (
             '$order_id',
-            CONCAT('WRM', LPAD($order_id,5,'0')),
+            CONCAT('WRM',LPAD('$order_id',5,'0')),
             '$total',
             'Paid'
         )
-    ");
+    ";
 
-    if (!$insertReceipt) {
+    if(!mysqli_query($conn,$sqlReceipt)){
         throw new Exception(mysqli_error($conn));
     }
 
     mysqli_commit($conn);
 
     echo json_encode([
-        "success" => true,
-        "order_id" => $order_id
+        "success"=>true,
+        "order_id"=>$order_id,
+        "customer_name"=>$customer_name
     ]);
 
-} catch (Exception $e) {
+}catch(Exception $e){
 
     mysqli_rollback($conn);
 
     echo json_encode([
-        "success" => false,
-        "message" => $e->getMessage()
+        "success"=>false,
+        "message"=>$e->getMessage()
     ]);
+
 }

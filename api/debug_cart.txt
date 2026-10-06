@@ -2,16 +2,9 @@ Array
 (
     [0] => Array
         (
-            [menu_id] => 21
+            [menu_id] => 13
             [quantity] => 1
-            [price] => 12000
-        )
-
-    [1] => Array
-        (
-            [menu_id] => 16
-            [quantity] => 1
-            [price] => 4000
+            [price] => 25000
         )
 
 )

@@ -1,12 +1,12 @@
 <?php
-require_once "../config/auth.php";
+require_once "../config/auth_kitchen.php";
 ?>
 <!DOCTYPE html>
 <html class="light" lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Warmindo Admin - Order Management</title>
+<title>Warmindo Kitchen</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -132,22 +132,11 @@ tailwind.config = {
 <body class="bg-surface text-on-surface font-body-md min-h-screen flex">
 <aside class="admin-sidebar fixed left-0 top-0 h-full w-64 flex flex-col p-md space-y-sm shadow-xl z-50">
 <div class="mb-lg px-md">
-<h1 class="font-headline-lg text-headline-lg text-secondary-fixed">Warmindo Admin</h1>
-<p class="font-label-sm text-label-sm text-surface-variant/70">Shop Manager</p>
+<h1>Warmindo Kitchen</h1>
+<p class="font-label-sm text-label-sm text-surface-variant/70">Kitchen Staff</p>
 </div>
 <nav class="flex-1 space-y-xs">
-<a class="flex items-center gap-sm bg-secondary text-on-secondary rounded-lg px-md py-sm my-xs active:translate-x-1 duration-150 transition-all font-label-sm text-label-sm" href="dashboard.php">
-<span class="material-symbols-outlined">dashboard</span>
-<span>Dashboard</span>
-</a>
-<a class="flex items-center gap-sm text-surface-variant hover:bg-surface-variant/10 rounded-lg px-md py-sm my-xs active:translate-x-1 duration-150 transition-all font-label-sm text-label-sm" href="revenue.php">
-<span class="material-symbols-outlined">payments</span>
-<span>Revenue</span>
-</a>
-<a class="flex items-center gap-sm text-surface-variant hover:bg-surface-variant/10 rounded-lg px-md py-sm my-xs active:translate-x-1 duration-150 transition-all font-label-sm text-label-sm" href="meja.php">
-<span class="material-symbols-outlined">qr_code</span>
-<span>Table & QR</span>
-</a>
+
 </nav>
 <div class="pt-md border-t border-surface-variant/10">
 <a class="flex items-center gap-sm text-surface-variant hover:bg-error/10 hover:text-error rounded-lg px-md py-sm transition-all active:translate-x-1 duration-150" href="../api/logout.php">
@@ -255,39 +244,6 @@ function getTimeAgo(dateStr) {
     return `${hrs}h ago`;
 }
 
-function getStatusBadge(status){
-
-    if(status === "pending"){
-        return `
-            <span class="px-3 py-1 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
-                ● Belum Dimasak
-            </span>
-        `;
-    }
-
-    if(status === "cooking"){
-        return `
-            <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
-                ● Sedang Dimasak
-            </span>
-        `;
-    }
-
-    if(status === "served"){
-        return `
-            <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                ● Sudah Dimasak
-            </span>
-        `;
-    }
-
-    return `
-        <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold">
-            ● Selesai
-        </span>
-    `;
-}   
-
 function renderOrderCard(order, status) {
     const items = order.items || [];
     const table = order.tables.nomor_meja
@@ -323,127 +279,62 @@ function renderOrderCard(order, status) {
                 </span>
             </div>
             ${progressHtml}
-            <ul class="space-y-xs mb-md border-b border-outline-variant/20 pb-sm">
+            <div class="border rounded-lg overflow-hidden mb-4">
+                <div class="grid grid-cols-5 px-3 py-2 border-b last:border-b-0 hover:bg-gray-50 transition">
+                    <div class="col-span-4">Name</div>
+                    <div class="text-right">Qty</div>
+                </div>
                 ${items.map(item => `
-                    <li class="flex justify-between text-on-surface">
-                        <span class="font-medium"><span class="text-primary font-bold">${item.qty}x</span> ${item.nama_menu || 'Unknown'}</span>
-                    </li>
-                `).join('')}
-            </ul>
-            <div class="flex justify-between items-center mb-xs">
-                <span class="text-on-surface-variant text-sm">Total:</span>
-                <span class="font-bold text-secondary">${formatPrice(order.total)}</span>
+                    <div class="grid grid-cols-5 px-3 py-2 border-t text-sm items-center">
+                        <div class="col-span-4 truncate">
+                            ${item.nama_menu}
+                        </div>
+                        <div class="text-right font-semibold text-orange-600">
+                            ${item.qty}x
+                        </div>
+                    </div>
+                `).join("")}
             </div>
-            ${status === "waiting" ? `
-    <button
-        onclick="confirmPayment(${order.id})"
-        class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition">
-        ✔ Sudah Dibayar
-    </button>
-` : ""}
+            <div class="mt-3">
+                ${getActionButtons(order, status)}
+            </div>
         </div>
-
-        ${status === "done" ? `
-<div class="mt-3 border-t pt-3">
-
-    <div class="grid grid-cols-2 gap-2 text-xs">
-
-        <div class="bg-blue-50 rounded-lg p-2">
-            <p class="text-gray-500">ETA</p>
-            <p class="font-bold text-blue-700">
-                ${order.eta ?? 10} Menit
-            </p>
-        </div>
-
-        <div class="bg-green-50 rounded-lg p-2">
-            <p class="text-gray-500">Aktual</p>
-            <p class="font-bold text-green-700">
-                ${order.actual_minutes ?? "-"} Menit
-            </p>
-        </div>
-
-    </div>
-
-    <div class="mt-2">
-
-        ${
-            (order.actual_minutes || 0) < (order.eta || 10)
-            ?
-
-            `<span class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                ⚡ Lebih Cepat ${(order.eta-order.actual_minutes)} Menit
-            </span>`
-
-            :
-
-            (order.actual_minutes || 0) == (order.eta || 10)
-
-            ?
-
-            `<span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
-                ✔ Tepat Waktu
-            </span>`
-
-            :
-
-            `<span class="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
-                ⏰ Terlambat ${(order.actual_minutes-order.eta)} Menit
-            </span>`
-        }
-
-    </div>
-
-</div>
-` : ""}
-
-        ${getStatusBadge(status)}
     `;
-}
-window.confirmPayment = async function(id){
-
-    if(!confirm("Konfirmasi pembayaran?")) return;
-
-    const res = await fetch("../api/update_order_status.php",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        },
-        body:`id=${id}&status=Pending`
-    });
-
-    const data = await res.json();
-
-    if(data.success){
-        showToast("Pembayaran berhasil");
-        loadOrders();
-    }else{
-        alert(data.message);
-    }
-
 }
 
 function getActionButtons(order, status) {
-    return `
-        <div class="flex justify-end mt-2">
-            ${
-                status === "pending"
-                ? `<span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
-                    ● Belum Dimasak
-                  </span>`
-                : status === "cooking"
-                ? `<span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
-                    ● Sedang Dimasak
-                  </span>`
-                : status === "served"
-                ? `<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                    ● Sudah Dimasak
-                  </span>`
-                : `<span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
-                    ● Selesai
-                  </span>`
-            }
-        </div>
-    `;
+
+        if (status === "pending") {
+            return `
+                <button
+                    class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
+                    onclick="updateOrderStatus(${order.id}, 'Diproses')">
+                    🍳 Mulai Masak
+                </button>
+            `;
+        }
+
+        if (status === "cooking") {
+            return `
+                <button
+                    class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    onclick="updateOrderStatus(${order.id}, 'Disajikan')">
+                    🍽️ Sajikan
+                </button>
+            `;
+        }
+
+        if (status === "served") {
+            return `
+                <button
+                    class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                    onclick="updateOrderStatus(${order.id}, 'Selesai')">
+                    ✅ Selesai
+                </button>
+            `;
+        }
+
+    return "";
 }
 
     window.updateOrderStatus = async function(id, status){
@@ -566,41 +457,34 @@ function showToast(message) {
     }, 3000);
 }
 
-async function loadOrders() {
+async function loadOrders(){
 
-    const res = await fetch("../api/get_orders.php");
-    const data = await res.json();
+    const res=await fetch("../api/get_orders.php");
 
-    // Kolom MENUNGGU
-    const waiting = data.filter(o => o.status === "Menunggu Pembayaran");
+    const data=await res.json();
 
-    // Kolom DIBUAT
-    const cooking = data.filter(o => o.status === "Pending");
-
-    // Kolom DISAJIKAN
-    const served = data.filter(o => o.status === "Diproses");
-
-    // Kolom SELESAI
-    const done = data.filter(o =>
-        o.status === "Disajikan" ||
-        o.status === "Selesai"
-    );
+    const pending = data.filter(o => o.status === "Pending");
+    const cooking = data.filter(o => o.status === "Diproses");
+    const served = data.filter(o => o.status === "Disajikan");
+    const done = data.filter(o => o.status === "Selesai");
 
     const notificationBadge = document.getElementById("notification-badge");
-    notificationBadge.innerText = waiting.length;
+        notificationBadge.innerText = pending.length;
+        if (pending.length > 0) {
+            notificationBadge.style.display = "flex";
+        } else {
+            notificationBadge.style.display = "none";
+        }
 
-    notificationBadge.style.display =
-        waiting.length > 0 ? "flex" : "none";
+    renderOrderList("pending-orders",pending,"pending");
+    renderOrderList("cooking-orders",cooking,"cooking");
+    renderOrderList("served-orders",served,"served");
+    renderOrderList("done-orders",done,"done");
 
-    renderOrderList("pending-orders", waiting, "waiting");
-    renderOrderList("cooking-orders", cooking, "cooking");
-    renderOrderList("served-orders", served, "served");
-    renderOrderList("done-orders", done, "done");
-
-    document.getElementById("pending-count").innerHTML = waiting.length;
-    document.getElementById("cooking-count").innerHTML = cooking.length;
-    document.getElementById("served-count").innerHTML = served.length;
-    document.getElementById("done-count").innerHTML = done.length;
+    document.getElementById("pending-count").innerHTML=pending.length;
+    document.getElementById("cooking-count").innerHTML=cooking.length;
+    document.getElementById("served-count").innerHTML=served.length;
+    document.getElementById("done-count").innerHTML=done.length;
 
 }
 

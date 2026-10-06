@@ -26,6 +26,18 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f3faff;
         }
+        html, body{
+    overflow-x:hidden;
+        }
+
+        img{
+            max-width:100%;
+            height:auto;
+        }
+
+        *{
+            box-sizing:border-box;
+        }
 </style>
 <script id="tailwind-config">
       tailwind.config = {
@@ -122,7 +134,7 @@
 </head>
 <body class="bg-background text-on-surface min-h-screen flex flex-col">
 <header class="bg-surface/80 backdrop-blur-md fixed top-0 w-full z-50 border-b border-white/20 shadow-md shadow-primary/10">
-<div class="flex justify-between items-center px-md py-sm max-w-container-max mx-auto">
+<div class="flex justify-between items-center px-4 md:px-6 py-3 max-w-container-max mx-auto">
 <div class="flex items-center gap-sm">
 <a href="../index.html" class="font-display-lg text-headline-lg font-black text-secondary hover:opacity-80 transition-opacity">Warmindo</a>
 </div>
@@ -140,13 +152,49 @@
 </div>
 </div>
 </header>
-<main class="flex-grow pt-[80px] pb-xl px-md max-w-container-max mx-auto w-full">
+<main class="flex-grow pt-20 pb-24 px-4 md:px-6 max-w-7xl mx-auto w-full">
 <div class="flex flex-col lg:grid lg:grid-cols-12 gap-md items-start mt-md">
 <div class="lg:col-span-8 w-full space-y-md">
-<div class="flex items-center justify-between">
-<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Your Order</h1>
-<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-sm py-xs rounded-full" id="item-count-badge">0 Items Selected</span>
+<!-- Nama Pelanggan -->
+<div class="glass-card warm-glow rounded-xl p-5 mb-5">
+    <div class="flex items-center gap-3 mb-3">
+        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary text-3xl">
+                person
+            </span>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-bold">
+                Selamat Datang 👋
+            </h2>
+            <p class="text-gray-500 text-sm">
+                Silakan masukkan nama Anda sebelum melakukan pemesanan.
+            </p>
+        </div>
+    </div>
+
+    <input
+        id="customer-name"
+        type="text"
+        placeholder="Masukkan nama pelanggan..."
+        class="w-full px-4 py-3 rounded-xl border-2 border-orange-200 focus:border-secondary outline-none bg-surface-container-low">
+
 </div>
+
+<!-- Header Order -->
+<div class="flex items-center justify-between">
+    <h1 class="text-3xl md:text-4xl font-bold text-on-background">
+        Your Order
+    </h1>
+
+    <span
+        id="item-count-badge"
+        class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-sm">
+        0 Items Selected
+    </span>
+</div>
+
 <div class="space-y-sm" id="cart-items-list">
 </div>
 <div id="empty-cart" class="hidden glass-card warm-glow rounded-xl p-xl text-center">
@@ -184,9 +232,11 @@ Browse Menu
                         </label>
 <textarea class="w-full bg-surface-container-low border-2 border-outline-variant/30 rounded-xl px-md py-sm font-body-md text-on-surface focus:border-secondary outline-none transition-all h-20 resize-none" placeholder="e.g. No onions, extra spicy..."></textarea>
 </div>
+<div class="glass-card p-md rounded-xl space-y-sm">
 </div>
 </div>
-<aside class="lg:col-span-4 w-full sticky top-[100px]">
+</div>
+<aside class="lg:col-span-4 w-full lg:sticky lg:top-[100px]">
 <div class="glass-card warm-glow rounded-xl p-lg border-2 border-primary-container/20 space-y-md">
 <h2 class="font-headline-lg text-headline-lg text-on-surface border-b border-outline-variant/30 pb-sm">Summary</h2>
 <div class="space-y-sm font-body-md text-body-md text-on-surface-variant">
@@ -208,7 +258,7 @@ Browse Menu
 <span class="font-title-md text-title-md text-on-surface">Total Amount</span>
 <span class="font-display-lg text-headline-lg text-secondary" id="total">Rp 0</span>
 </div>
-<button id="payment-btn" class="noodle-gradient w-full py-md rounded-xl text-white font-title-md text-title-md font-bold shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-sm">
+<button id="payment-btn" class="noodle-gradient w-full py-4 text-base md:text-lg rounded-xl text-white font-title-md text-title-md font-bold shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-sm">
                             Proceed to Payment
                             <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
 </button>
@@ -227,7 +277,7 @@ Browse Menu
 </aside>
 </div>
 </main>
-<footer class="bg-surface-container-lowest border-t border-outline-variant/30 w-full mt-auto">
+<footer class="bg-surface-container-lowest border-t border-outline-variant/30 w-full mt-auto mb-16 md:mb-0">
 <div class="flex flex-col md:flex-row justify-between items-center px-xl py-md gap-md max-w-container-max mx-auto">
 <div class="flex flex-col items-center md:items-start gap-xs">
 <span class="font-title-md text-title-md text-primary">Warmindo</span>
@@ -241,7 +291,7 @@ Browse Menu
 </div>
 </footer>
 <nav class="md:hidden fixed bottom-0 left-0 right-0 glass-card border-t border-white/20 z-50">
-<div class="flex justify-around items-center h-16">
+<div class="flex justify-evenly items-center h-16">
 <a href="../index.html" class="flex flex-col items-center gap-xs text-on-surface-variant/70">
 <span class="material-symbols-outlined" data-icon="home">home</span>
 <span class="text-[10px] font-bold">Home</span>
@@ -257,10 +307,6 @@ Browse Menu
 </div>
 <span class="text-[10px]">Cart</span>
 </a>
-<button class="flex flex-col items-center gap-xs text-on-surface-variant/70">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-<span class="text-[10px] font-bold">Profile</span>
-</button>
 </div>
 </nav>
 <script>
@@ -314,8 +360,8 @@ function renderCart() {
         tableNotesSection.classList.remove('hidden');
 
         container.innerHTML = cart.map(item => `
-            <div class="glass-card warm-glow rounded-xl p-md flex flex-col sm:flex-row gap-md items-center">
-                <div class="w-full sm:w-32 h-32 rounded-lg overflow-hidden shrink-0">
+            <div class="glass-card warm-glow rounded-xl p-4 flex flex-col sm:flex-row gap-4 items-center">
+                <div class="w-full sm:w-28 h-28 md:h-32 rounded-lg overflow-hidden shrink-0">
                     <img class="w-full h-full object-cover" src="../${item.image}" alt="${item.name}">
                 </div>
                 <div class="flex-grow space-y-xs w-full text-center sm:text-left">
@@ -370,12 +416,20 @@ function updateSummary() {
     }
 }
 
-document.getElementById('payment-btn').addEventListener('click', function() {
+document.getElementById('payment-btn').addEventListener('click', function () {
     if (cart.length === 0) {
         alert('Your cart is empty!');
         return;
     }
-    window.location.href = 'payment.html';
+    const customerName = document.getElementById("customer-name").value.trim();
+    if(customerName === ""){
+        alert("Silakan isi nama pelanggan.");
+        return;
+    }
+    localStorage.setItem("customer_name", customerName);
+
+    console.log("Nama tersimpan :", localStorage.getItem("customer_name"));
+    window.location.href = "payment.html";
 });
 
 function loadTableNumber() {
@@ -390,6 +444,7 @@ window.onload = function() {
     loadTableNumber();
     renderCart();
 };
+
 </script>
 </body>
 </html>
